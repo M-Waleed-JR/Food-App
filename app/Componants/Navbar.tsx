@@ -1,141 +1,163 @@
 "use client";
 
-import { Utensils, ShoppingCartIcon, User, MenuIcon, X } from "lucide-react";
-import { useState } from "react";
+import { Utensils, ShoppingCart, User, Menu, X } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState, useSyncExternalStore } from "react";
+
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/menu", label: "Menu" },
+  { href: "/orders", label: "Orders" },
+  { href: "/contact", label: "Contact" },
+];
+
+// True once the page is scrolled a little. useSyncExternalStore keeps this
+// lint-safe (no setState inside an effect) and hydration-safe (server = false).
+const subscribe = (callback: () => void) => {
+  window.addEventListener("scroll", callback, { passive: true });
+  return () => window.removeEventListener("scroll", callback);
+};
+const useScrolled = () =>
+  useSyncExternalStore(
+    subscribe,
+    () => window.scrollY > 20,
+    () => false,
+  );
 
 const Navbar = () => {
-  const [openMenu, setOpenMenu] = useState(false);
-
-  const handleClick = () => {
-    setOpenMenu(!openMenu);
-  };
+  const [open, setOpen] = useState(false);
+  const scrolled = useScrolled();
+  const pathname = usePathname();
+  const solid = scrolled || open;
 
   return (
-    <div className="w-full bg-white shadow-sm relative z-50">
-      {/* Discount Notification */}
-      <div className="w-full text-center bg-red-400 text-white py-2 text-xs md:text-sm font-medium">
-        <p>Get 20% off on your first order • Free delivery over $50!</p>
+    <header className="fixed inset-x-0 top-0 z-50">
+      {/* Promo bar: collapses smoothly once you scroll */}
+      <div
+        className={`grid transition-[grid-template-rows] duration-300 ${
+          scrolled ? "grid-rows-[0fr]" : "grid-rows-[1fr]"
+        }`}
+      >
+        <div className="overflow-hidden">
+          <p className="bg-black/50 py-2 text-center text-xs text-white/80 backdrop-blur-md md:text-sm">
+            Get <span className="font-semibold text-red-400">20% off</span> on
+            your first order • Free delivery over $50
+          </p>
+        </div>
       </div>
 
-      {/* Main Header Bar */}
-      <div className="w-full px-4 md:px-8 py-4 flex items-center justify-between">
-        {/* LOGO */}
-        <a href="#" className="flex items-center gap-2 group cursor-pointer">
-          <div className="p-2 bg-red-500 text-white rounded-xl shadow-md group-hover:scale-105 transition-transform duration-200">
-            <Utensils className="w-5 h-5" />
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xl md:text-2xl font-black tracking-tight text-gray-900 group-hover:text-red-500 transition-colors">
+      {/* Main bar: transparent over the hero, solid once you scroll */}
+      <div
+        className={`transition-colors duration-300 ${
+          solid
+            ? "bg-neutral-950/90 shadow-[0_1px_0_0_rgba(255,255,255,0.08)] backdrop-blur-xl"
+            : "bg-gradient-to-b from-black/50 to-transparent"
+        }`}
+      >
+        <nav className="relative flex h-16 items-center justify-between px-5 sm:px-8">
+          {/* Logo */}
+          <Link href="/" className="group flex items-center gap-2.5">
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-red-600 text-white shadow-lg shadow-red-900/40 transition-transform group-hover:scale-105">
+              <Utensils className="h-[18px] w-[18px]" />
+            </span>
+            <span className="text-xl font-black tracking-tight text-white md:text-2xl">
               GUSTO
             </span>
-            <span className="text-[10px] md:text-xs font-semibold px-2 py-0.5 bg-red-50 text-red-500 rounded-full border border-red-100">
+            <span className="rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] font-semibold text-white/70 md:text-xs">
               المذاق
             </span>
-          </div>
-        </a>
+          </Link>
 
-        {/* Desktop Navigation Links */}
-        <div className="hidden lg:block">
-          <ul className="flex gap-8 font-medium text-gray-700">
-            <li className="cursor-pointer hover:text-red-500 transition-colors">
-              Home
-            </li>
-            <li className="cursor-pointer hover:text-red-500 transition-colors">
-              Menu
-            </li>
-            <li className="cursor-pointer hover:text-red-500 transition-colors">
-              Orders
-            </li>
-            <li className="cursor-pointer hover:text-red-500 transition-colors">
-              Contact
-            </li>
+          {/* Desktop links (centered) */}
+          <ul className="hidden items-center gap-9 lg:absolute lg:left-1/2 lg:flex lg:-translate-x-1/2">
+            {links.map(({ href, label }) => {
+              const active = pathname === href;
+              return (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className={`relative py-1 text-sm font-medium transition-colors ${
+                      active ? "text-white" : "text-white/70 hover:text-white"
+                    }`}
+                  >
+                    {label}
+                    {active && (
+                      <span className="absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-red-500" />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
-        </div>
 
-        {/* Right Actions & Mobile Toggle */}
-        <div className="flex items-center gap-2 md:gap-3">
-          {/* Action buttons (Visible on Desktop) */}
-          <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors">
-            <ShoppingCartIcon className="w-4 h-4" />
-            Cart
-          </button>
+          {/* Actions */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              aria-label="Cart"
+              className="grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-white/20 text-white/90 transition hover:bg-white/10"
+            >
+              <ShoppingCart className="h-[18px] w-[18px]" />
+            </button>
 
-          <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-red-500 text-white hover:bg-red-600 rounded-lg text-sm font-medium shadow-sm transition-colors">
-            <User className="w-4 h-4" />
-            Login
-          </button>
+            <button
+              type="button"
+              className="hidden cursor-pointer items-center gap-2 rounded-full bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-red-900/40 transition hover:bg-red-700 active:scale-95 sm:inline-flex"
+            >
+              <User className="h-4 w-4" />
+              Login
+            </button>
 
-          {/* Cart Icon Button for ultra-small mobile screens when closed */}
-          <button className="sm:hidden p-2 text-gray-700 bg-gray-100 rounded-lg">
-            <ShoppingCartIcon className="w-5 h-5" />
-          </button>
-
-          {/* Mobile Hamburger / Close Button */}
-          <button
-            onClick={handleClick}
-            className="p-2 text-gray-700 hover:bg-gray-100 rounded-lg lg:hidden transition-colors"
-            aria-label="Toggle Navigation"
-          >
-            {openMenu ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <MenuIcon className="w-6 h-6" />
-            )}
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              aria-label="Toggle navigation"
+              aria-expanded={open}
+              className="grid h-10 w-10 cursor-pointer place-items-center rounded-full text-white transition hover:bg-white/10 lg:hidden"
+            >
+              {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
+        </nav>
       </div>
 
-      {/* Modern Red Full-Screen Overlay Menu */}
-      {openMenu && (
-        <div className="lg:hidden top-[100px] left-0 w-full h-[calc(100vh-108px)] bg-red-500 flex flex-col justify-between p-8 z-50 animate-in fade-in-20 slide-in-from-top-4 duration-300">
-          {/* Main Navigation Links */}
-          <ul className="flex flex-col items-center justify-center gap-8 text-white font-bold text-2xl tracking-wide my-auto">
-            <li
-              className="cursor-pointer hover:text-red-100 hover:scale-110 transition-all duration-200"
-              onClick={() => setOpenMenu(false)}
-            >
-              Home
-            </li>
-            <li
-              className="cursor-pointer hover:text-red-100 hover:scale-110 transition-all duration-200"
-              onClick={() => setOpenMenu(false)}
-            >
-              Menu
-            </li>
-            <li
-              className="cursor-pointer hover:text-red-100 hover:scale-110 transition-all duration-200"
-              onClick={() => setOpenMenu(false)}
-            >
-              Orders
-            </li>
-            <li
-              className="cursor-pointer hover:text-red-100 hover:scale-110 transition-all duration-200"
-              onClick={() => setOpenMenu(false)}
-            >
-              Contact
-            </li>
+      {/* Mobile menu */}
+      {open && (
+        <div className="absolute inset-x-0 top-full border-t border-white/10 bg-neutral-950 px-5 pb-6 pt-2 shadow-2xl lg:hidden">
+          <ul>
+            {links.map(({ href, label }) => {
+              const active = pathname === href;
+              return (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    onClick={() => setOpen(false)}
+                    className={`flex items-center justify-between border-b border-white/10 py-4 text-lg font-semibold transition-colors ${
+                      active ? "text-red-500" : "text-white hover:text-red-400"
+                    }`}
+                  >
+                    {label}
+                    {active && (
+                      <span className="h-2 w-2 rounded-full bg-red-500" />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
 
-          {/* Bottom Action Cards for Mobile */}
-          <div className="flex flex-col gap-3 w-full max-w-xs mx-auto pb-6">
-            <button
-              onClick={() => setOpenMenu(false)}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-white text-red-500 font-semibold rounded-xl shadow-md active:scale-95 transition-transform"
-            >
-              <ShoppingCartIcon className="w-5 h-5" />
-              View Cart
-            </button>
-            <button
-              onClick={() => setOpenMenu(false)}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-red-500 text-white font-semibold rounded-xl border border-red-300 shadow-md active:scale-95 transition-transform"
-            >
-              <User className="w-5 h-5" />
-              Login / Sign Up
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="mt-6 flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-red-600 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-900/40 transition active:scale-95"
+          >
+            <User className="h-4 w-4" />
+            Login / Sign Up
+          </button>
         </div>
       )}
-    </div>
+    </header>
   );
 };
 

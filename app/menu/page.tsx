@@ -1,7 +1,5 @@
-export default function MenuPage() {
-  return (
-    <div>
-      <h1>Menu</h1>
-    </div>
-  );
-}
+const menu = () => {
+  return <h1 className="flex items-center p-10 text-3xl font-bold">Menu</h1>;
+};
+
+export default menu;

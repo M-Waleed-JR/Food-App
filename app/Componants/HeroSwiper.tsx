@@ -27,12 +27,13 @@ const HeroSwiper = ({ slides }: HeroSwiperProps) => {
       className="h-full w-full"
     >
       {slides.map((src, i) => (
-        <SwiperSlide key={src}>
+        <SwiperSlide key={`${src}-${i}`}>
           <Image
             src={src}
             alt={`Hero slide ${i + 1}`}
             fill
             sizes="100vw"
+            priority={i === 0}
             className="object-cover object-center"
           />
         </SwiperSlide>
