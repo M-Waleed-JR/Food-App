@@ -4,10 +4,10 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 
 const slides = [
-  "/Home materials/Slider3.webp",
-  "/Home materials/Slider2.webp",
-  "/Home materials/Slider1.webp",
-  "/Home materials/Slider4.webp",
+  "/Home materials/Pasta.webp",
+  "/Home materials/Pizza.webp",
+  "/Home materials/Burger.webp",
+  "/Home materials/FriedChicken.webp",
 ];
 
 // Swiper uses new Date() during prerender, so it only loads in the browser.
@@ -28,7 +28,10 @@ const HeroSwiper = dynamic(() => import("./HeroSwiper"), {
 
 const Slider = () => {
   return (
-    <section className="relative h-svh min-h-[560px] w-full overflow-hidden bg-black">
+    <section
+      id="home"
+      className="relative h-svh min-h-[560px] w-full overflow-hidden bg-black"
+    >
       {/* Background slider + blur/gradient overlay */}
       <div className="absolute inset-0">
         <HeroSwiper slides={slides} />

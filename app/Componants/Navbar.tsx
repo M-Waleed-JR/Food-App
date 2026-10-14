@@ -1,15 +1,16 @@
 "use client";
 
-import { Utensils, ShoppingCart, User, Menu, X } from "lucide-react";
+import { Utensils, User, Menu, X, Heart } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useSyncExternalStore } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
 
 const links = [
-  { href: "/", label: "Home" },
-  { href: "/menu", label: "Menu" },
-  { href: "/orders", label: "Orders" },
-  { href: "/contact", label: "Contact" },
+  { href: "#home", label: "Home" },
+  { href: "#AboutUs", label: "AboutUs" },
+  { href: "#Menu", label: "Menu" },
+  { href: "#WishList", label: "WishList" },
+  { href: "#Contact", label: "Contact" },
 ];
 
 // True once the page is scrolled a little. useSyncExternalStore keeps this
@@ -27,9 +28,65 @@ const useScrolled = () =>
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
   const scrolled = useScrolled();
   const pathname = usePathname();
   const solid = scrolled || open;
+
+  useEffect(() => {
+    const handleScrollSpy = () => {
+      const sectionIds = ["home", "AboutUs", "Menu", "WishList", "Contact"];
+      const scrollPosition = window.scrollY + 120;
+
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const id = sectionIds[i];
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollPosition) {
+          setActiveSection(id);
+          return;
+        }
+      }
+      setActiveSection("home");
+    };
+
+    handleScrollSpy();
+    window.addEventListener("scroll", handleScrollSpy, { passive: true });
+    return () => window.removeEventListener("scroll", handleScrollSpy);
+  }, []);
+
+  const handleScroll = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    if (pathname !== "/") return;
+
+    e.preventDefault();
+    const targetId = href.replace(/^(\/)?#/, "") || "home";
+
+    if (targetId === "home") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      window.history.pushState(null, "", "/");
+      setActiveSection("home");
+      return;
+    }
+
+    const element = document.getElementById(targetId);
+    if (element) {
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+      window.history.pushState(null, "", `#${targetId}`);
+      setActiveSection(targetId);
+    }
+  };
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">
@@ -57,14 +114,18 @@ const Navbar = () => {
       >
         <nav className="relative flex h-16 items-center justify-between px-5 sm:px-8">
           {/* Logo */}
-          <Link href="/" className="group flex items-center gap-2.5">
+          <Link
+            href="/"
+            onClick={(e) => handleScroll(e, "/")}
+            className="group flex items-center gap-1.5"
+          >
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-red-600 text-white shadow-lg shadow-red-900/40 transition-transform group-hover:scale-105">
               <Utensils className="h-[18px] w-[18px]" />
             </span>
-            <span className="text-xl font-black tracking-tight text-white md:text-2xl">
+            <span className="text-xl font-black tracking-tight text-white md:text-2xl italic cursor-pointer">
               GUSTO
             </span>
-            <span className="rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] font-semibold text-white/70 md:text-xs">
+            <span className="rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] font-semibold text-red-600 md:text-xs">
               المذاق
             </span>
           </Link>
@@ -72,11 +133,13 @@ const Navbar = () => {
           {/* Desktop links (centered) */}
           <ul className="hidden items-center gap-9 lg:absolute lg:left-1/2 lg:flex lg:-translate-x-1/2">
             {links.map(({ href, label }) => {
-              const active = pathname === href;
+              const targetId = href.replace(/^(\/)?#/, "") || "home";
+              const active = activeSection === targetId;
               return (
                 <li key={href}>
                   <Link
                     href={href}
+                    onClick={(e) => handleScroll(e, href)}
                     className={`relative py-1 text-sm font-medium transition-colors ${
                       active ? "text-white" : "text-white/70 hover:text-white"
                     }`}
@@ -98,7 +161,7 @@ const Navbar = () => {
               aria-label="Cart"
               className="grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-white/20 text-white/90 transition hover:bg-white/10"
             >
-              <ShoppingCart className="h-[18px] w-[18px]" />
+              <Heart className="h-[18px] w-[18px]" />
             </button>
 
             <button
@@ -127,12 +190,16 @@ const Navbar = () => {
         <div className="absolute inset-x-0 top-full border-t border-white/10 bg-neutral-950 px-5 pb-6 pt-2 shadow-2xl lg:hidden">
           <ul>
             {links.map(({ href, label }) => {
-              const active = pathname === href;
+              const targetId = href.replace(/^(\/)?#/, "") || "home";
+              const active = activeSection === targetId;
               return (
                 <li key={href}>
                   <Link
                     href={href}
-                    onClick={() => setOpen(false)}
+                    onClick={(e) => {
+                      handleScroll(e, href);
+                      setOpen(false);
+                    }}
                     className={`flex items-center justify-between border-b border-white/10 py-4 text-lg font-semibold transition-colors ${
                       active ? "text-red-500" : "text-white hover:text-red-400"
                     }`}
