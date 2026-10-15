@@ -9,7 +9,7 @@ const links = [
   { href: "#home", label: "Home" },
   { href: "#AboutUs", label: "AboutUs" },
   { href: "#Menu", label: "Menu" },
-  { href: "#WishList", label: "WishList" },
+  { href: "#OurStaff", label: "OurStaff" },
   { href: "#Contact", label: "Contact" },
 ];
 
@@ -35,7 +35,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScrollSpy = () => {
-      const sectionIds = ["home", "AboutUs", "Menu", "WishList", "Contact"];
+      const sectionIds = ["home", "AboutUs", "Menu", "OurStaff", "Contact"];
       const scrollPosition = window.scrollY + 120;
 
       for (let i = sectionIds.length - 1; i >= 0; i--) {

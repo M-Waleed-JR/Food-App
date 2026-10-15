@@ -1,26 +1,31 @@
 "use client";
 
 import { Utensils, Phone, Mail, MapPin, Clock } from "lucide-react";
+import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer id="Contact" className="w-full bg-[#05070b] text-gray-300 pt-12 pb-6 border-t border-gray-800">
+    <footer
+      id="Contact"
+      className="w-full bg-[#05070b] text-gray-300 pt-12 pb-6 border-t border-gray-800"
+    >
       <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
         {/* Brand Info */}
         <div className="flex flex-col gap-4">
-          <a href="#" className="flex items-center gap-2 group cursor-pointer">
-            <div className="p-2 bg-red-500 text-white rounded-xl shadow-md group-hover:scale-105 transition-transform duration-200">
-              <Utensils className="w-5 h-5" />
-            </div>
-            <div className="flex items-center  gap-2">
-              <span className="text-2xl font-black tracking-tight text-white group-hover:text-red-400 transition-colors">
-                GUSTO
-              </span>
-              <span className="text-xs font-semibold px-2 py-0.5 bg-red-950 text-red-400 rounded-full border border-red-800">
-                المذاق
-              </span>
-            </div>
-          </a>
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 group cursor-pointer w-max"
+          >
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-red-600 text-white shadow-lg shadow-red-900/40 transition-transform group-hover:scale-105">
+              <Utensils className="h-[18px] w-[18px]" />
+            </span>
+            <span className="text-xl font-black tracking-tight text-white md:text-2xl italic">
+              GUSTO
+            </span>
+            <span className="rounded-full border border-white/15 bg-white/5 px-2 py-0.5 text-[10px] font-semibold text-red-600 md:text-xs">
+              المذاق
+            </span>
+          </Link>
           <p className="text-sm text-gray-400 leading-relaxed">
             Delivering authentic flavors and memorable dining experiences
             straight to your doorstep. Fresh ingredients, cooked with love.
@@ -65,29 +70,44 @@ const Footer = () => {
           </h3>
           <ul className="flex flex-col gap-2.5 text-sm">
             <li>
-              <a href="#" className="hover:text-red-400 transition-colors">
+              <Link
+                href="#home"
+                className="hover:text-red-400 transition-colors"
+              >
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:text-red-400 transition-colors">
-                Our Menu
-              </a>
+              <Link
+                href="#AboutUs"
+                className="hover:text-red-400 transition-colors"
+              >
+                About Us
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:text-red-400 transition-colors">
-                Track Orders
-              </a>
+              <Link
+                href="#Menu"
+                className="hover:text-red-400 transition-colors"
+              >
+                Menu
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:text-red-400 transition-colors">
-                Offers & Discounts
-              </a>
+              <Link
+                href="#OurStaff"
+                className="hover:text-red-400 transition-colors"
+              >
+                Our Staff
+              </Link>
             </li>
             <li>
-              <a href="#" className="hover:text-red-400 transition-colors">
-                Contact Us
-              </a>
+              <Link
+                href="#Contact"
+                className="hover:text-red-400 transition-colors"
+              >
+                Contact
+              </Link>
             </li>
           </ul>
         </div>
@@ -146,12 +166,12 @@ const Footer = () => {
           Rights Reserved.
         </p>
         <div className="flex gap-4">
-          <a href="#" className="hover:text-gray-400 transition-colors">
+          <Link href="#" className="hover:text-gray-400 transition-colors">
             Privacy Policy
-          </a>
-          <a href="#" className="hover:text-gray-400 transition-colors">
+          </Link>
+          <Link href="#" className="hover:text-gray-400 transition-colors">
             Terms of Service
-          </a>
+          </Link>
         </div>
       </div>
     </footer>

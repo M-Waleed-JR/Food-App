@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 const slides = [
   "/Home materials/Pasta.webp",
@@ -62,18 +63,18 @@ const Slider = () => {
           </p>
 
           <div className="mt-6 grid grid-cols-2 gap-3 sm:mt-9 sm:flex sm:gap-4">
-            <button
-              type="button"
+            <Link
+              href="#Menu"
               className="cursor-pointer rounded-full bg-red-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-red-900/40 transition hover:bg-red-700 active:scale-95 sm:px-9 sm:py-4 sm:text-base"
             >
               Order Now
-            </button>
-            <button
-              type="button"
+            </Link>
+            <Link
+              href="#Menu"
               className="cursor-pointer rounded-full border border-white/50 px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-white hover:text-black active:scale-95 sm:px-9 sm:py-4 sm:text-base"
             >
               View Menu
-            </button>
+            </Link>
           </div>
         </div>
       </div>
