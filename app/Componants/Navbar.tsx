@@ -1,10 +1,10 @@
 "use client";
 
-import { Utensils, Menu, X, Heart, HandPlatter } from "lucide-react";
+import { Utensils, Menu, X, HandPlatter } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-
+import Image from "next/image";
 const links = [
   { href: "/#home", label: "Home" },
   { href: "/#AboutUs", label: "AboutUs" },
@@ -132,8 +132,14 @@ const Navbar = () => {
             onClick={(e) => handleClick(e, "/")}
             className="group flex items-center gap-1.5"
           >
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-red-600 text-white shadow-lg shadow-red-900/40 transition-transform group-hover:scale-105">
-              <Utensils className="h-[18px] w-[18px]" />
+            <span className="grid h-14 w-14 place-items-center transition-transform group-hover:scale-105">
+              <Image
+                src="/gusto.png"
+                alt="Logo"
+                width={70}
+                height={70}
+                className="object-contain"
+              />
             </span>
             <span className="text-xl font-black italic tracking-tight text-white md:text-2xl">
               GUSTO

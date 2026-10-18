@@ -15,8 +15,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Food App",
-  description: "Order your favorite food",
+  title: "Gusto",
+  description:
+    " Taste the authentic flavor of home , where every dish tells a story and every bite brings you closer to what you love .",
+  icons: {
+    icon: "/gusto.png",
+    shortcut: "/gusto.png",
+    apple: "/gusto.png",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
