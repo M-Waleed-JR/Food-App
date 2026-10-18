@@ -6,7 +6,6 @@ import Link from "next/link";
 const Footer = () => {
   return (
     <footer
-      id="Contact"
       className="w-full bg-[#05070b] text-gray-300 pt-12 pb-6 border-t border-gray-800"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
@@ -71,7 +70,7 @@ const Footer = () => {
           <ul className="flex flex-col gap-2.5 text-sm">
             <li>
               <Link
-                href="#home"
+                href="/#home"
                 className="hover:text-red-400 transition-colors"
               >
                 Home
@@ -79,7 +78,7 @@ const Footer = () => {
             </li>
             <li>
               <Link
-                href="#AboutUs"
+                href="/#AboutUs"
                 className="hover:text-red-400 transition-colors"
               >
                 About Us
@@ -87,7 +86,7 @@ const Footer = () => {
             </li>
             <li>
               <Link
-                href="#Menu"
+                href="/#Menu"
                 className="hover:text-red-400 transition-colors"
               >
                 Menu
@@ -95,7 +94,7 @@ const Footer = () => {
             </li>
             <li>
               <Link
-                href="#OurStaff"
+                href="/#OurStaff"
                 className="hover:text-red-400 transition-colors"
               >
                 Our Staff
@@ -103,7 +102,7 @@ const Footer = () => {
             </li>
             <li>
               <Link
-                href="#Contact"
+                href="/Contact"
                 className="hover:text-red-400 transition-colors"
               >
                 Contact
